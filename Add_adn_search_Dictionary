@@ -1,0 +1,139 @@
+
+class WordDictionary {
+
+    /** Initialize your data structure here. */
+    class TrieNode
+    {
+        boolean terminate =false;
+        TrieNode children[] = new TrieNode[26];
+        public TrieNode next(char ch)
+        {
+            return children[ch-'a'];
+        }  
+    }
+    
+    TrieNode root;
+    public WordDictionary() {
+       root = new TrieNode();
+    }
+    
+    /** Adds a word into the data structure. */
+    public void addWord(String word) {
+        TrieNode current = root;
+        for(int i=0; i< word.length(); i++)
+        {
+            if(current.children[word.charAt(i)-'a'] == null)
+                current.children[word.charAt(i) - 'a'] = new TrieNode();
+            current = current.next(word.charAt(i));
+        }
+        current.terminate= true;
+    }
+    
+    /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
+    public boolean search(String word) {
+       return aux_search(word, root,0);
+    }
+    public boolean aux_search(String word, TrieNode root, int pos)
+    {
+        TrieNode current = root;
+        for(int i=pos ;i< word.length(); i++)
+        {
+            char temp = word.charAt(i);
+            if(temp == '.')
+            {
+                for(int p=0;p<26;p++)
+                {
+                    if(current.children[p]!=null)
+                    {
+                        if(aux_search(word,current.children[p],i+1))
+                        {
+                            return true;
+                        } 
+                    }
+                }
+                return false;
+            }
+            else
+            {
+            if(current.children[word.charAt(i)-'a'] == null)
+                return false;
+            current = current.next(word.charAt(i));
+            }
+        }
+        if(current.terminate == true)
+            return true;
+        else
+            return false;
+    }
+}
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.addWord(word);
+ * boolean param_2 = obj.search(word);
+ */
+ 
+ 
+ 
+ 
+ class WordDictionary {
+
+    /** Initialize your data structure here. */
+    public WordDictionary children[];
+    boolean terminate;
+    
+    public WordDictionary() {
+        children = new WordDictionary[26];
+        terminate = false;
+    }
+    
+     public WordDictionary next(char ch)
+     {
+         return children[ch-'a'];
+     }
+    
+   // public WordDictionary root;
+    /** Adds a word into the data structure. */
+    
+    public void addWord(String word) {
+        WordDictionary current = this;
+        for(int i=0; i< word.length(); i++)
+        {
+            if(current.children[word.charAt(i)-'a'] == null)
+                current.children[word.charAt(i) - 'a'] = new WordDictionary();
+            current = current.next(word.charAt(i));
+        }
+        current.terminate= true;
+    }
+    
+    /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
+    public boolean search(String word) {
+        WordDictionary current = this;
+        for(int i=0 ;i< word.length(); i++)
+        {
+            char temp = word.charAt(i);
+            if(temp == '.')
+            {
+                for(WordDictionary t: current.children)
+                    if(t != null && t.search(word.substring(i+1)))
+                        return true;
+                return false;
+            }
+            if(current.children[word.charAt(i)-'a'] == null)
+                return false;
+            current = current.next(word.charAt(i));
+        }
+        if(current.terminate == true)
+            return true;
+        else
+            return false;
+    }
+}
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.addWord(word);
+ * boolean param_2 = obj.search(word);
+ */
