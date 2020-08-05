@@ -1,0 +1,10 @@
+        // power of 2 and last digit is either 1,4,6
+        return (num & num-1)==0 && (num %10 == 1 || num%10 == 4 || num%10 == 6);
+        
+        //power of 2 and num % 3 ==1
+        return (num & num-1)==0 && (num %3 == 1); 
+        
+        //4 ^ (log num base 4) == num
+        return num >0 && Math.pow(4,(int)(Math.log10(num)/ Math.log10(4)) )== num;
+        
+        return num >0 && ((num & num-1)==0)  && ((num & 0xaaaaaaaa) == 0) ;
