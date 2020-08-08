@@ -1,0 +1,111 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+ 
+ //No sorting
+class Solution {
+    public void dfs(TreeNode root, int vd,TreeMap<Integer, List<Integer>> map)
+    {
+        if(root == null)
+            return;
+        if(map.get(vd) == null)
+        {
+            List<Integer> l = new ArrayList<>();
+            l.add(root.val);
+            map.put(vd, l);
+        }
+        else
+        {
+            List<Integer> l = map.get(vd);
+            l.add(root.val);
+            map.put(vd, l);
+        }
+        dfs(root.left, vd-1, map);
+        dfs(root.right, vd+1,map);
+    }
+    public List<List<Integer>> verticalTraversal(TreeNode root) {           
+        if(root == null)
+            return new ArrayList<>();
+        List<List<Integer>> m = new ArrayList<>();
+        TreeMap<Integer, List<Integer>> result = new TreeMap<Integer, List<Integer>>();
+        int vd = 0;
+        dfs(root, vd, result);
+        for(Map.Entry<Integer,List<Integer>> cm : result.entrySet())
+        {
+           Collections.sort(cm.getValue(),(o1,o2) -> {
+               return o1-o2;
+           });
+            m.add(cm.getValue());
+        }
+        return m;
+    }
+}
+
+
+CORRECT SOLUTION WITH PROPER SORTING
+
+class Solution {
+    class Point
+    {
+        int x;
+        int y;
+        int val;
+        Point(int x,int y,int val)
+        {
+            this.x= x;
+            this.y =y;
+            this.val = val;
+        }
+    }
+    public void dfs(TreeNode root, int x, int y, List<Point> map)
+    {
+        if(root == null)
+            return;
+        map.add(new Point(x,y,root.val));
+        dfs(root.left, x-1,y-1,  map);
+        dfs(root.right, x+1, y-1, map);
+    }
+    public List<List<Integer>> verticalTraversal(TreeNode root) {           
+        if(root == null)
+            return new ArrayList<>();
+        List<Point> list = new ArrayList<>();
+        dfs(root, 0, 0, list);
+        Collections.sort(list, (o1, o2)->{
+            return o1.x == o2.x ? o1.y == o2.y ?o1.val - o2.val:o2.y - o1.y: o2.x -o1.x; 
+        });
+        //System.out.println(Arrays.asList(list));
+        TreeMap<Integer,List<Integer>> map = new TreeMap<Integer,List<Integer>>();
+        for(Point p: list)
+        {
+            if(map.get(p.x) == null)
+            {
+                List<Integer> l = new ArrayList<>();
+                l.add(p.val);
+                map.put(p.x, l);
+            }
+            else
+            {
+               List<Integer> l= map.get(p.x);
+                l.add(p.val);
+                map.put(p.x ,l);
+            }
+        }
+        List<List<Integer>> end = new ArrayList<>();
+        for (Map.Entry<Integer,List<Integer>> cm : map.entrySet()){
+           end.add(cm.getValue());
+        }
+        return end;
+    }
+}
