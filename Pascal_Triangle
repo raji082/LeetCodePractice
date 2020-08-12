@@ -1,0 +1,16 @@
+class Solution {
+    public List<Integer> getRow(int rowIndex) {
+        List<Integer> list = new ArrayList<>();
+        for(int i=0 ;i<=rowIndex; i++)
+            list.add(1);
+        for(int k=0; k<rowIndex-1;k++){
+            for(int j=k+1;j>0;j--)
+            {
+                int temp = list.get(j);
+                temp = temp + list.get(j-1);
+                list.set(j,temp);
+            }
+        }
+        return list;
+    }
+}
