@@ -1,0 +1,45 @@
+class StreamChecker {
+    
+    class TrieNode
+    {
+        boolean endOfWord;
+        TrieNode children[];
+        TrieNode()
+        {
+            endOfWord = false;
+            children = new TrieNode[26];
+        }
+    }
+    private TrieNode root = new TrieNode();
+    StringBuilder sb = new StringBuilder();    
+    public StreamChecker(String[] words) {
+        for(String w : words)
+            insert(w);
+    }
+    
+    public void insert(String word)
+    {
+        TrieNode current = root;
+        for(int i =word.length()-1; i>=0 ;i--)
+        {
+            if(current.children[word.charAt(i)-'a'] == null)
+                current.children[word.charAt(i)-'a'] = new TrieNode();
+            current = current.children[word.charAt(i)-'a'];
+        }
+        current.endOfWord = true;
+    }
+    
+    public boolean query(char letter) {
+            TrieNode current = root;
+            sb.append(letter);
+            for(int i= sb.length()-1; i>=0 ;i--)
+            {
+                if(current.children[sb.charAt(i)-'a'] == null)
+                    return false;
+                current = current.children[sb.charAt(i)-'a'];
+                if(current.endOfWord == true)
+                    return true;
+            }
+        return false;
+    }
+}
